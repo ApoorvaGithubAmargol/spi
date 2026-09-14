@@ -32,11 +32,15 @@ module spi_slave_reg_controller (
 
         begin
             case (addr)
+
                 8'h00: get_register = 8'hA5;
                 8'h01: get_register = control_reg;
                 8'h02: get_register = status_reg;
                 8'h03: get_register = data_reg;
-                default: get_register = 8'h00;
+
+                default:
+                    get_register = 8'h00;
+
             endcase
         end
     endfunction
@@ -56,6 +60,7 @@ module spi_slave_reg_controller (
                 data_reg_rx <= data_next;
 
         end
+
     end
 
     always @(*) begin
@@ -67,30 +72,25 @@ module spi_slave_reg_controller (
         write_addr = 8'h00;
         write_data = 8'h00;
 
-        /*
-         * READ command:
-         * bit_count 7 is the final header bit.
-         */
-        if (sample && bit_count == 5'd7 && header_next[7]) begin
+        if (sample && bit_count == 5'd7) begin
 
-            response_load = 1'b1;
-
-            response_data = {
-                8'h00,
-                get_register({1'b0, header_next[6:0]})
-            };
+            if (header_next[7]) begin
+                response_load = 1'b1;
+                response_data = {
+                    8'h00,
+                    get_register({1'b0, header_next[6:0]})
+                };
+            end
 
         end
 
-        /*
-         * WRITE command:
-         * bit_count 15 is the final data bit.
-         */
-        if (sample && bit_count == 5'd15 && !header_reg[7]) begin
+        if (sample && bit_count == 5'd15) begin
 
-            write_en   = 1'b1;
-            write_addr = {1'b0, header_reg[6:0]};
-            write_data = data_next;
+            if (!header_reg[7]) begin
+                write_en   = 1'b1;
+                write_addr = {1'b0, header_reg[6:0]};
+                write_data = data_next;
+            end
 
         end
 

@@ -37,43 +37,18 @@ module spi_slave (
     wire [7:0]  write_addr;
     wire [7:0]  write_data;
 
-    /*
-     * status_value is the LIVE SPI slave status.
-     *
-     * bit[1] = done
-     * bit[0] = busy
-     */
     wire [7:0] status_value;
 
-    /*
-     * IMPORTANT:
-     *
-     * spi_regfile also has a status_reg output.
-     * Do NOT connect that output directly to the external
-     * status_reg signal, because status_reg is already driven
-     * below by status_value.
-     *
-     * Give the regfile status storage its own internal signal.
-     */
     wire [7:0] regfile_status_reg;
 
 
-    /*
-     * Live status register.
-     *
-     * This is now the ONLY driver of the slave's external
-     * status_reg output.
-     */
+
     assign status_value = {6'b0, done, busy};
 
     assign status_reg = status_value;
 
 
-    /*
-     * ============================================================
-     * SLAVE FSM
-     * ============================================================
-     */
+//slave fsm
 
     spi_slave_fsm fsm (
         .clk        (clk),
@@ -95,16 +70,7 @@ module spi_slave (
     );
 
 
-    /*
-     * ============================================================
-     * REGISTER CONTROLLER
-     * ============================================================
-     *
-     * The controller uses the LIVE status_reg when a read
-     * command addresses register 0x02.
-     *
-     * control_reg and data_reg come from the actual register file.
-     */
+//reg controller
 
     spi_slave_reg_controller reg_controller (
         .clk            (clk),
@@ -127,22 +93,7 @@ module spi_slave (
     );
 
 
-    /*
-     * ============================================================
-     * REGISTER FILE
-     * ============================================================
-     *
-     * The regfile contains writable registers:
-     *
-     * 0x01 -> control_reg
-     * 0x03 -> data_reg
-     *
-     * Its internal status_reg output is intentionally NOT connected
-     * to the external status_reg signal.
-     *
-     * Status is read-only and is supplied dynamically by
-     * status_value above.
-     */
+//reg file
 
     spi_regfile regfile (
         .clk         (clk),
@@ -172,11 +123,7 @@ module spi_slave (
     );
 
 
-    /*
-     * ============================================================
-     * SLAVE SHIFT REGISTER
-     * ============================================================
-     */
+//slave shift reg
 
     spi_slave_shift_reg #(
         .WIDTH(16)

@@ -50,11 +50,7 @@ module spi_master_shift_reg #(
 
         else begin
 
-            /*
-             * ====================================================
-             * LOAD
-             * ====================================================
-             */
+//load
             if (load) begin
 
                 if (transfer_width == 5'd8)
@@ -71,16 +67,7 @@ module spi_master_shift_reg #(
 
             else begin
 
-                /*
-                 * =================================================
-                 * SAMPLE
-                 * =================================================
-                 *
-                 * The FSM determines the actual sample edge:
-                 *
-                 * CPHA=0 -> leading edge
-                 * CPHA=1 -> trailing edge
-                 */
+//sample
                 if (sample) begin
 
                     if (transfer_width == 5'd8) begin
@@ -101,12 +88,7 @@ module spi_master_shift_reg #(
 
                 end
 
-
-                /*
-                 * =================================================
-                 * SHIFT / LAUNCH
-                 * =================================================
-                 */
+//shift
                 if (shift) begin
 
                     if (cpha) begin

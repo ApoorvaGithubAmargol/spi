@@ -270,16 +270,12 @@ module tb_spi_master_slave;
 
         if (errors == 0) begin
             $display("");
-            $display("======================================");
             $display(" ALL SPI INTEGRATION TESTS PASSED");
-            $display("======================================");
         end
         else begin
             $display("");
-            $display("======================================");
             $display(" SPI INTEGRATION TESTS FAILED: %0d",
                      errors);
-            $display("======================================");
         end
 
 
