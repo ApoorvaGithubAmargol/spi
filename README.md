@@ -264,6 +264,13 @@ The SPI master-slave design was tested for all four SPI modes using the integrat
 
 ## Waveform Results
 
+# SPI waveform verification simulation output.
+
+<img width="470" height="600" alt="vvp simulation waveform" src="https://github.com/user-attachments/assets/b24409b1-1eda-483f-910b-6e9fd5a34e98" />
+
+The simulation confirms successful register write and read operations for all four SPI modes (0–3), with 0x005A correctly received in every mode.
+
+
 # SPI Mode 0 waveform showing register write and read operation.
 
 <img width="600" height="400" alt="overall spi 00" src="https://github.com/user-attachments/assets/4032f2db-3a03-4153-93f2-f5d31ef191b3" />
@@ -287,8 +294,3 @@ The SPI clock uses CPOL=1, with data transfer occurring on the corresponding fal
 
 The waveform demonstrates CPOL=1 and CPHA=1 operation. The master successfully reads register 0x01, receiving 0x005A.
 
-# SPI waveform verification simulation output.
-
-<img width="915" height="865" alt="vvp simulation waveform" src="https://github.com/user-attachments/assets/b24409b1-1eda-483f-910b-6e9fd5a34e98" />
-
-The simulation confirms successful register write and read operations for all four SPI modes (0–3), with 0x005A correctly received in every mode.
