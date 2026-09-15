@@ -17,29 +17,15 @@ The design supports **all four SPI modes (0–3)**, **8-bit and 16-bit transfers
 - Includes a dedicated waveform/debug testbench
 - Verifies SPI timing across all four modes
 
-## Project Structure
+## Tools Used
 
-```text
-spi/
-├── rtl/
-│   ├── spi_clock_gen.v
-│   ├── spi_master_fsm.v
-│   ├── spi_master_shift_reg.v
-│   ├── spi_master.v
-│   ├── spi_regfile.v
-│   ├── spi_slave_reg_controller.v
-│   ├── spi_slave_fsm.v
-│   ├── spi_slave_shift_reg.v
-│   ├── spi_slave.v
-│   └── spi_master_slave_top.v
-│
-├── tb/
-│   ├── tb_spi_master_slave.v
-│   └── tb_spi_waveform_debug.v
-│
-└── sim/
-    └── Simulation outputs and VCD waveform files
-```
+- **Verilog HDL**
+- **Icarus Verilog**
+- **GTKWave**
+- **WSL / Ubuntu**
+- **VS Code**
+
+----------------------------------------------------------------------------------------------------
 
 ### Directory Description
 
@@ -181,20 +167,8 @@ The integration testbench passes for all four SPI modes.
 
 `tb_spi_waveform_debug.v` is used to inspect SPI timing using GTKWave.
 
-It tests read and write operations in all four modes:
+It tests read and write operations in all four modes. The waveforms are used to verify the relationship between `CS`, `SCLK`, `MOSI` and `MISO`, with particular attention to the CPHA = 1 timing behavior.
 
-```text
-Mode 0 → Write + Read
-Mode 1 → Write + Read
-Mode 2 → Write + Read
-Mode 3 → Write + Read
-```
-
-The waveforms are used to verify the relationship between `CS`, `SCLK`, `MOSI` and `MISO`, with particular attention to the CPHA = 1 timing behavior.
-
-## Simulation
-
-The project can be simulated using **Icarus Verilog**.
 
 ### Integration Testbench
 
@@ -258,13 +232,7 @@ Open the waveform using GTKWave:
 gtkwave sim/spi_waveform.vcd
 ```
 
-## Tools Used
-
-- **Verilog HDL**
-- **Icarus Verilog**
-- **GTKWave**
-- **WSL / Ubuntu**
-- **VS Code**
+------------------------------------------------------------------------------------------------
 
 ## Project Status
 
@@ -289,3 +257,38 @@ The SPI master-slave design was tested for all four SPI modes using the integrat
 | Mode 1   | `0x5A` written to register `0x01` | Read returned `0x005A` | PASS   |
 | Mode 2   | `0x5A` written to register `0x01` | Read returned `0x005A` | PASS   |
 | Mode 3   | `0x5A` written to register `0x01` | Read returned `0x005A` | PASS   |
+
+
+-------------------------------------------------------------------------------------------------------
+
+
+## Waveform Results
+
+# SPI Mode 0 waveform showing register write and read operation.
+
+<img width="600" height="400" alt="overall spi 00" src="https://github.com/user-attachments/assets/4032f2db-3a03-4153-93f2-f5d31ef191b3" />
+
+The master transmits 0x015A to write 0x5A to register 0x01, followed by a read command 0x8100. The slave returns 0x005A successfully.
+
+# SPI Mode 1 waveform showing register write and read operation.
+
+<img width="600" height="400" alt="overall spi 01" src="https://github.com/user-attachments/assets/db354d29-6aac-468d-b920-20d8be4ac1c7" />
+The waveform shows CPHA-based data shifting and sampling with the expected MOSI/MISO timing. The read transaction 0x8100 returns 0x005A.
+
+# SPI Mode 2 waveform showing register write and read operation.
+
+<img width="600" height="400" alt="overall spi 10" src="https://github.com/user-attachments/assets/ef7be9cb-3982-4dfe-963a-a9f3eaf2fea5" />
+
+The SPI clock uses CPOL=1, with data transfer occurring on the corresponding falling/rising edges. The slave correctly receives the command and returns 0x005A.
+
+# SPI Mode 3 waveform showing register write and read operation.
+
+<img width="600" height="400" alt="overall spi 11" src="https://github.com/user-attachments/assets/f79c0b1c-28ad-4f6a-a9e1-cbb660241841" />
+
+The waveform demonstrates CPOL=1 and CPHA=1 operation. The master successfully reads register 0x01, receiving 0x005A.
+
+# SPI waveform verification simulation output.
+
+<img width="915" height="865" alt="vvp simulation waveform" src="https://github.com/user-attachments/assets/b24409b1-1eda-483f-910b-6e9fd5a34e98" />
+
+The simulation confirms successful register write and read operations for all four SPI modes (0–3), with 0x005A correctly received in every mode.
