@@ -247,7 +247,14 @@ The SPI master-slave controller has been functionally simulated and verified for
 - SPI timing and waveform behavior
 
 
-## Verification Results
+
+
+
+# SPI waveform verification & simulation output.
+
+<img width="470" height="600" alt="vvp simulation waveform" src="https://github.com/user-attachments/assets/b24409b1-1eda-483f-910b-6e9fd5a34e98" />
+
+The simulation confirms successful register write and read operations for all four SPI modes (0–3), with 0x005A correctly received in every mode.
 
 The SPI master-slave design was tested for all four SPI modes using the integration testbench.
 
@@ -259,16 +266,8 @@ The SPI master-slave design was tested for all four SPI modes using the integrat
 | Mode 3   | `0x5A` written to register `0x01` | Read returned `0x005A` | PASS   |
 
 
--------------------------------------------------------------------------------------------------------
 
 
-## Waveform Results
-
-# SPI waveform verification simulation output.
-
-<img width="470" height="600" alt="vvp simulation waveform" src="https://github.com/user-attachments/assets/b24409b1-1eda-483f-910b-6e9fd5a34e98" />
-
-The simulation confirms successful register write and read operations for all four SPI modes (0–3), with 0x005A correctly received in every mode.
 
 
 # SPI Mode 0 waveform showing register write and read operation.
